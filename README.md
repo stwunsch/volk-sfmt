@@ -23,6 +23,7 @@ Installation
 ------------
 
     git clone https://github.com/stwunsch/volk-sfmt  
+    cd volk-sfmt  
     mkdir build  
     cd build  
     ctest ..  
