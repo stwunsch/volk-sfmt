@@ -1,7 +1,7 @@
 VOLK module with SIMD-oriented Fast Mersenne-Twister (SFMT) implementation  
 ==========================================================================
 
-This module is an stand-alone extension (or so-called out-of-tree module) of VOLK. The purpose is porting the SFMT code [0,1] to the VOLK framework, which ensures portability of the code. VOLK selects the correct implementation (generic or SSE2) based on the used compatibility of the used hardware.
+This module is a stand-alone extension (or so-called out-of-tree module) of VOLK [0]. The purpose is porting the SFMT code [1,2] to the VOLK framework, which ensures portability of the code. VOLK selects the correct implementation (generic or SSE2) based on the compatibility of the used hardware.
 
 Runtime  evaluation  
 -------------------
@@ -33,5 +33,6 @@ Installation
 References  
 ---------
 
-[0] http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/SFMT/  
-[1] http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/SFMT/SFMT-src-1.4.1.tar.gz  
+[0] http://www.libvolk.org  
+[1] http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/SFMT/  
+[2] http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/SFMT/SFMT-src-1.4.1.tar.gz  
