@@ -22,13 +22,13 @@ Note that for the array version of the SFMT implementations the function call to
 Installation  
 ------------
 
-git clone https://github.com/stwunsch/volk-sfmt  
-mkdir build  
-cd build  
-ctest ..  
-make  
-ctest -V  
-make install  
+    git clone https://github.com/stwunsch/volk-sfmt  
+    mkdir build  
+    cd build  
+    ctest ..  
+    make  
+    ctest -V  
+    make install  
 
 References  
 ---------
