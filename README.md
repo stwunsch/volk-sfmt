@@ -6,16 +6,16 @@ This module is a stand-alone extension (or so-called out-of-tree module) of VOLK
 Runtime  evaluation  
 -------------------
 
-Runtime relative to standard Mersenne Twister to generate 62400000 pseudo random numbers:
+Runtime relative to standard Mersenne Twister to generate 62400000 pseudo random numbers. The code is compiled with level 3 optimization.
 
     Standard Mersenne-Twister: 1  
-    Boost.Random Mersenne-Twister: 1.02158  
-    Original SFMT impl SSE2: 1.00007  
-    Original SFMT array impl SSE2: 3.20311  
-    VOLK SFMT generic: 0.903747  
-    VOLK SFMT array generic: 1.3417  
-    VOLK SFMT SSE2: 1.73701  
-    VOLK SFMT array SSE2: 3.33381  
+    Boost.Random Mersenne-Twister: 1.02159  
+    Original impl: 0.997666  
+    VOLK generic: 0.996441  
+    VOLK SSE2: 1.74102  
+    Original array impl: 3.2169  
+    VOLK array generic: 1.34155  
+    VOLK array SSE2: 3.35664  
 
 Note that for the array version of the SFMT implementations the function call to return a single pseudo random number is not included! This makes the comparison with the standard SFMT versions not fair, if single values are desired.
 
