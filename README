@@ -1,46 +1,37 @@
-#
-# Copyright 2015 Free Software Foundation, Inc.
-#
-# This file is part of VOLK
-#
-# VOLK is free software; you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 3, or (at your option)
-# any later version.
-#
-# VOLK is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with GNU Radio; see the file COPYING.  If not, write to
-# the Free Software Foundation, Inc., 51 Franklin Street,
-# Boston, MA 02110-1301, USA.
-#
+VOLK module with SIMD-oriented Fast Mersenne-Twister (SFMT) implementation  
+==========================================================================
 
-Welcome to VOLK!
+This module is an stand-alone extension (or so-called out-of-tree module) of VOLK. The purpose is porting the SFMT code [0,1] to the VOLK framework, which ensures portability of the code. VOLK selects the correct implementation (generic or SSE2) based on the used compatibility of the used hardware.
 
-VOLK is a sub-project of GNU Radio. Please see http://libvolk_sfmt.org for bug
-tracking, documentation, source code, and contact information about VOLK.
-See http://gnuradio.org/ for information about GNU Radio.
+Runtime  evaluation  
+-------------------
 
-Bleeding edge code can be found in our git repository at
-http://gnuradio.org/git/volk_sfmt.git/.
+Runtime relative to standard Mersenne Twister to generate 62400000 pseudo random numbers:
 
-How to use VOLK:
+    Standard Mersenne-Twister: 1  
+    Boost.Random Mersenne-Twister: 1.02158  
+    Original SFMT impl SSE2: 1.00007  
+    Original SFMT array impl SSE2: 3.20311  
+    VOLK SFMT generic: 0.903747  
+    VOLK SFMT array generic: 1.3417  
+    VOLK SFMT SSE2: 1.73701  
+    VOLK SFMT array SSE2: 3.33381  
 
-For detailed instructions see http://libvolk_sfmt.org/doxygen/using_volk_sfmt.html
+Note that for the array version of the SFMT implementations the function call to return a single pseudo random number is not included! This makes the comparison with the standard SFMT versions not fair, if single values are desired.
 
-See these steps for a quick build guide.
+Installation  
+------------
 
-Build with cmake:
+git clone https://github.com/stwunsch/volk-sfmt  
+mkdir build  
+cd build  
+ctest ..  
+make  
+ctest -V  
+make install  
 
-    $ mkdir build
-    $ cd build
-    $ cmake ..
-    $ make
-    $ make test
-    $ sudo make install
+References  
+---------
 
-That's it!
+[0] http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/SFMT/  
+[1] http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/SFMT/SFMT-src-1.4.1.tar.gz  
