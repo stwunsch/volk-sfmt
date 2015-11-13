@@ -6,7 +6,7 @@ LV_CXXFLAGS=@LV_CXXFLAGS@
 
 
 Name: volk_sfmt
-Description: VOLK: Vector Optimized Library of Kernels
+Description: VOLK module with SIMD-oriented Fast Mersenne Twister (SFMT) implementation
 Requires:
 Version: @LIBVER@
 Libs: -L${libdir} -lvolk_sfmt

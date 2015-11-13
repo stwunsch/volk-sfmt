@@ -1,0 +1,27 @@
+pkgname=volk-sfmt
+_gitname=volk-sfmt
+pkgver=git
+pkgrel=1
+pkgdesc="VOLK module with SIMD-oriented Fast Mersenne Twister (SFMT) implementation"
+arch=('x86_64')
+license=('GPL')
+depends=()
+makedepends=('git' 'cmake' 'make')
+optdepends=()
+source=("git://github.com/stwunsch/volk-sfmt")
+md5sums=('SKIP')
+conflicts=()
+provides=()
+
+build() {
+  cd $_gitname
+  mkdir -p build
+  cd build
+  cmake ..
+  make -j4
+}
+
+package() {
+  cd "$srcdir/$_gitname/build"
+  make DESTDIR="$pkgdir" install
+}

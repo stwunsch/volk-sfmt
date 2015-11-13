@@ -28,16 +28,8 @@ std::vector<volk_sfmt_test_case_t> init_test_list(volk_sfmt_test_params_t test_p
             test_params.vlen(), test_params.iter(), test_params.benchmark_mode(), test_params.kernel_regex());
 
     std::vector<volk_sfmt_test_case_t> test_cases = boost::assign::list_of
-        // no one uses these, so don't test them
-        //VOLK_PROFILE(volk_sfmt_16i_x5_add_quad_16i_x4, 1e-4, 2046, 10000, &results, benchmark_mode, kernel_regex);
-        //VOLK_PROFILE(volk_sfmt_16i_branch_4_state_8, 1e-4, 2046, 10000, &results, benchmark_mode, kernel_regex);
-        //VOLK_PROFILE(volk_sfmt_16i_max_star_16i, 0, 0, 204602, 10000, &results, benchmark_mode, kernel_regex);
-        //VOLK_PROFILE(volk_sfmt_16i_max_star_horizontal_16i, 0, 0, 204602, 10000, &results, benchmark_mode, kernel_regex);
-        //VOLK_PROFILE(volk_sfmt_16i_permute_and_scalar_add, 1e-4, 0, 2046, 10000, &results, benchmark_mode, kernel_regex);
-        //VOLK_PROFILE(volk_sfmt_16i_x4_quad_max_star_16i, 1e-4, 0, 2046, 10000, &results, benchmark_mode, kernel_regex);
-        // we need a puppet for this one
-        //(VOLK_INIT_TEST(volk_sfmt_32fc_s32f_x2_power_spectral_density_32f,   test_params))
-        (VOLK_INIT_TEST(volk_sfmt_32f_null_32f, test_params))
+
+        (VOLK_INIT_PUPP(volk_sfmt_32u_genrandpuppet_32u, volk_32u_sfmt_genrand, test_params))
         ;
 
     return test_cases;
