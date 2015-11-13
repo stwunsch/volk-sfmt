@@ -1,0 +1,3 @@
+This is an example use of the volk_sfmt_32u_genrand kernel. Since the SFMT algorithm produces 624 pseudo random numbers at a time, the actual use of the kernel needs little bit logic for gathering a single random number.
+
+Same logic can be applied on the array version of the implementation. The enlarged buffer increases the performance drastically.

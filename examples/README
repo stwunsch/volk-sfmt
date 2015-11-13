@@ -1,0 +1,9 @@
+runtime_eval
+------------
+
+This script does not only measure the runtime of the different implementations. As well, it shows that the VOLK implementations return the same values than the original implementation.
+
+arch_makepkg
+------------
+
+For the arch linux users among us ;)

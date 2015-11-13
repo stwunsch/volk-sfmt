@@ -1,0 +1,3 @@
+Test runtime of VOLK implementations (sse2 and generic) versus boost.random and conventional Mersenne Twister implementation.
+
+To select the SSE2 or generic version of the original implementation, use the compiler flag HAVE_SSE2.
