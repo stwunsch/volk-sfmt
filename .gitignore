@@ -2,3 +2,4 @@ build/
 *.swp
 *.swo
 volk_modtool.cfg
+examples/reference_impl/
