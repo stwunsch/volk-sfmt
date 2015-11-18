@@ -30,6 +30,8 @@ Often, only a level 2 optimization is used. Then following relative runtimes are
     VOLK array generic: 1.91401  
     VOLK array SSE2: 4.7696  
 
+This comparison is only half-fair because the VOLK functions are always compiled with level 3 optimization (and the code used above does only link to the library). Nevertheless, the compile time of the main program is reduced due to the used O2 compiler flag, but the crucial parts regarding the runtime are still on high performance since they are linked to VOLK.
+
 Installation  
 ------------
 
