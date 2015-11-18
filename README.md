@@ -10,10 +10,10 @@ Runtime relative to standard Mersenne Twister to generate 62400000 pseudo random
 
     Standard Mersenne-Twister: 1  
     Boost.Random Mersenne-Twister: 1.02159  
-    Original impl: 0.997666  
+    Original impl (SSE2): 0.997666  
     VOLK generic: 0.996441  
     VOLK SSE2: 1.74102  
-    Original array impl: 3.2169  
+    Original array impl (SSE2): 3.2169  
     VOLK array generic: 1.34155  
     VOLK array SSE2: 3.35664  
 
@@ -23,7 +23,7 @@ Often, only a level 2 optimization is used. Then following relative runtimes are
 
     Standard Mersenne-Twister: 1  
     Boost.Random Mersenne-Twister: 1.1719  
-    Original impl: 1.42074  
+    Original impl (SSE2): 1.42074  
     VOLK generic: 1.15378  
     VOLK SSE2: 2.4919  
     Original array impl: 4.56878  
