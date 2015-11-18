@@ -19,6 +19,17 @@ Runtime relative to standard Mersenne Twister to generate 62400000 pseudo random
 
 Note that for the array version of the SFMT implementations the function call to return a single pseudo random number is not included! This makes the comparison with the standard SFMT versions not fair, if single values are desired.
 
+Often, only a level 2 optimization is used. Then following relative runtimes are given.
+
+    Standard Mersenne-Twister: 1  
+    Boost.Random Mersenne-Twister: 1.1719  
+    Original impl: 1.42074  
+    VOLK generic: 1.15378  
+    VOLK SSE2: 2.4919  
+    Original array impl: 4.56878  
+    VOLK array generic: 1.91401  
+    VOLK array SSE2: 4.7696  
+
 Installation  
 ------------
 
