@@ -31,6 +31,7 @@ std::vector<volk_sfmt_test_case_t> init_test_list(volk_sfmt_test_params_t test_p
 
         (VOLK_INIT_PUPP(volk_sfmt_32u_genrandpuppet_32u, volk_sfmt_32u_genrand, test_params))
         (VOLK_INIT_PUPP(volk_sfmt_32u_genrand_arraypuppet_32u, volk_sfmt_32u_genrand_array_32u, test_params))
+        (VOLK_INIT_PUPP(volk_sfmt_64f_genrandpuppet_64f, volk_sfmt_64f_genrand, test_params))
         ;
 
     return test_cases;
