@@ -79,7 +79,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define DSFMT_MEXP 19937
 
 /*
- * sfmt generator has an internal state array of 128-bit integers,
+ * DSFMT generator has an internal state array of 128-bit integers,
  * and N is its size.
  */
 #define DSFMT_N ((DSFMT_MEXP - 128) / 104 + 1)
@@ -100,9 +100,6 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * Algorithm parameters for Mersenne exponent of 19937.
  */
 #define DSFMT_POS1	117
-#define DSFMT_SL1	19
-#define DSFMT_MSK1	UINT64_C(0x000ffafffffffb3f)
-#define DSFMT_MSK2	UINT64_C(0x000ffdfffc90fffd)
 #define DSFMT_MSK32_1	0x000ffaffU
 #define DSFMT_MSK32_2	0xfffffb3fU
 #define DSFMT_MSK32_3	0x000ffdffU
@@ -111,8 +108,11 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define DSFMT_FIX2	UINT64_C(0x3b8d12ac548a7c7a)
 #define DSFMT_PCV1	UINT64_C(0x3d84e1ac0dc82880)
 #define DSFMT_PCV2	UINT64_C(0x0000000000000001)
-#define DSFMT_SSE2_SHUFF 0x1b
 #define DSFMT_SR	12
+#define DSFMT_SSE2_SHUFF 0x1b
+#define DSFMT_MSK1	UINT64_C(0x000ffafffffffb3f)
+#define DSFMT_MSK2	UINT64_C(0x000ffdfffc90fffd)
+#define DSFMT_SL1	19
 
 #ifndef INCLUDED_volk_sfmt_64f_genrand_a_H
 #define INCLUDED_volk_sfmt_64f_genrand_a_H
@@ -129,10 +129,17 @@ static inline void volk_sfmt_64f_genrand_generic(double *states){
 #include <volk_sfmt/volk_sfmt_sse2_intrinsics.h>
 
 static inline void volk_sfmt_64f_genrand_a_sse2(double *states){
-    //int i;
+    uint32_t i;
     __m128i *pstate = (__m128i*) states;
 
     dsfmt_recursion(*(pstate), *(pstate), *(pstate + DSFMT_POS1), *(pstate + DSFMT_N));
+    for (i = 1; i < DSFMT_N - DSFMT_POS1; i++){
+        dsfmt_recursion(*(pstate + i), *(pstate + i), *(pstate + i + DSFMT_POS1), *(pstate + DSFMT_N));
+    }
+    for (; i < DSFMT_N; i++){
+        dsfmt_recursion(*(pstate + i), *(pstate + i), *(pstate + i + DSFMT_POS1 - DSFMT_N), *(pstate + DSFMT_N));
+    }
+    *(pstate + DSFMT_N) = *(pstate + DSFMT_N); // FIXME: useless but in original code?
 }
 
 #endif /* LV_HAVE_SSE2 */

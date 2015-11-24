@@ -30,6 +30,15 @@
 
 #include <emmintrin.h>
 
+#define SFMT_MSK1	0xdfffffefU
+#define SFMT_MSK2	0xddfecb7fU
+#define SFMT_MSK3	0xbffaffffU
+#define SFMT_MSK4	0xbffffff6U
+#define SFMT_SR1	11
+#define SFMT_SR2	1
+#define SFMT_SL1	18
+#define SFMT_SL2	1
+
 static inline __m128i sfmt_recursion(__m128i a, __m128i b, __m128i c, __m128i d){
     __m128i v, x, y, z;
 
@@ -49,12 +58,11 @@ static inline __m128i sfmt_recursion(__m128i a, __m128i b, __m128i c, __m128i d)
     return z;
 }
 
-// FIXME: remove this paramters! why they are not recognized?
-#define DSFMT_SL1	19
+#define DSFMT_SR	12
+#define DSFMT_SSE2_SHUFF 0x1b
 #define DSFMT_MSK1	UINT64_C(0x000ffafffffffb3f)
 #define DSFMT_MSK2	UINT64_C(0x000ffdfffc90fffd)
-#define DSFMT_SSE2_SHUFF 0x1b
-#define DSFMT_SR	12
+#define DSFMT_SL1	19
 
 static inline void dsfmt_recursion(__m128i r, __m128i a, __m128i b, __m128i u){
     __m128i v, w, y, z;
