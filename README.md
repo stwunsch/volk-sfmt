@@ -6,7 +6,7 @@ This module is a stand-alone extension (or so-called out-of-tree module) of VOLK
 Runtime  evaluation
 -------------------
 
-Runtime of the SFMT algorithm (not the dSFMT!) relative to standard Mersenne Twister to generate 62400000 pseudo random numbers. Output is a uint32_t value. The code is compiled with level 3 optimization.
+Runtime of the SFMT algorithm (not the dSFMT!) relative to standard Mersenne Twister to generate 62400000 pseudo random numbers. Output is an uint32_t value. The code is compiled with level 3 optimization.
 
     Standard Mersenne-Twister: 1  
     Boost.Random Mersenne-Twister: 1.02159  
@@ -34,12 +34,7 @@ This comparison is only half-fair because the VOLK functions are always compiled
 
 The dSFMT algorithm performs as shown below. The output is a double in the range [0,1). The code is compiled with level 3 optimization and 114600 random numbers are created during the test.
 
-    Boost.Random Mersenne-Twister: 4.06061
-    VOLK dSFMT generic: 1.27922
-    VOLK dSFMT SSE2: 1
-    VOLK SFMT generic with conversion: 2.48918
-    VOLK SFMT SSE2 with conversion: 2.07359
-    Original dSFMT impl (SSE2): 1.07359
+    TODO
 
 Installation  
 ------------
