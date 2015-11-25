@@ -1,0 +1,171 @@
+/*** DEPENDENCIES ***
+ * boost.random
+ * VOLK SFMT module
+ * C++11
+ */
+
+#include <volk_sfmt/volk_sfmt.h>
+#include <volk/volk.h>
+#include "../dsfmt_reference_impl/dSFMT.h"
+#include <boost/random.hpp>
+#include <chrono>
+
+using namespace std::chrono;
+
+#if defined(HAVE_SSE2)
+int run_mode(){
+    std::cout << "The original implementation uses SSE2." << std::endl;
+    return 1;
+}
+#endif
+
+#if !defined(HAVE_SSE2)
+int run_mode(){
+    std::cout << "The original implementation DOES NOT use SSE2." << std::endl;
+    return 0;
+}
+#endif
+
+static inline void volk_genrand_generic(double* output, double* states, uint32_t* index){
+    if(*index>=DSFMT_N64){
+        volk_sfmt_64f_genrand_manual(states, "generic");
+        *index = 0;
+    }
+    *output = states[*index]-1.0;
+    *index += 1;
+}
+
+static inline void volk_genrand_sse(double* output, double* states, uint32_t* index){
+    if(*index>=DSFMT_N64){
+        volk_sfmt_64f_genrand_manual(states, "a_sse2");
+        *index = 0;
+    }
+    *output = states[*index]-1.0;
+    *index += 1;
+}
+
+static inline void volk_genrand_conv_generic(double* output, uint32_t* states, uint32_t* index){
+    if(*index>=624){
+        volk_sfmt_32u_genrand_manual(states, "generic");
+        *index = 0;
+    }
+    *output = states[*index]/(double)(0xFFFFFFFF-0x1);
+    //*output = (double)states[*index];
+    *index += 1;
+}
+
+static inline void volk_genrand_conv_sse(double* output, uint32_t* states, uint32_t* index){
+    if(*index>=624){
+        volk_sfmt_32u_genrand_manual(states, "a_sse2");
+        *index = 0;
+    }
+    *output = states[*index]/(double)(0xFFFFFFFF-0x1);
+    //*output = (double)states[*index];
+    *index += 1;
+}
+
+int main(void){
+    /* SETUP */
+    int mode_original = run_mode();
+
+    /* INIT */
+    size_t alignment = volk_sfmt_get_alignment();
+    std::cout << "Alignment: " << alignment << std::endl;
+    double *volk_generic_states = (double*) volk_sfmt_malloc((DSFMT_N64+1)*2, alignment);
+    double *volk_sse_states = (double*) volk_sfmt_malloc((DSFMT_N64+1)*2, alignment);
+    uint32_t *volk_conv_generic_states = (uint32_t*) volk_sfmt_malloc(624*4, alignment);
+    uint32_t *volk_conv_sse_states = (uint32_t*) volk_sfmt_malloc(624*4, alignment);
+    uint32_t seed = 4357;
+    volk_sfmt_64f_genrand_init(volk_generic_states, seed);
+    volk_sfmt_64f_genrand_init(volk_sse_states, seed);
+    volk_sfmt_32u_genrand_init(volk_conv_generic_states, seed);
+    volk_sfmt_32u_genrand_init(volk_conv_sse_states, seed);
+
+    dsfmt_t dsfmt;
+    dsfmt_chk_init_gen_rand(&dsfmt, seed, 19937);
+
+    uint32_t num_gen = DSFMT_N64 * 400;
+    high_resolution_clock::time_point t1, t2;
+
+    /* RUN VOLK GENERIC */
+    double volk_generic_value[num_gen];
+    t1 = high_resolution_clock::now();
+    uint32_t volk_generic_index = DSFMT_N64;
+    for(uint32_t k=0; k<num_gen; k++){
+        volk_genrand_generic(volk_generic_value+k, volk_generic_states, &volk_generic_index);
+    }
+    t2 = high_resolution_clock::now();
+    uint32_t runtime_volk_generic = duration_cast<microseconds>(t2-t1).count();
+
+    /* RUN VOLK SSE2 */
+    double volk_sse_value[num_gen];
+    t1 = high_resolution_clock::now();
+    uint32_t volk_sse_index = DSFMT_N64;
+    for(uint32_t k=0; k<num_gen; k++){
+        volk_genrand_sse(volk_sse_value+k, volk_sse_states, &volk_sse_index);
+    }
+    t2 = high_resolution_clock::now();
+    uint32_t runtime_volk_sse = duration_cast<microseconds>(t2-t1).count();
+
+    /* RUN VOLK GENERIC WITH CONVERSION FROM UINT32_T*/
+    double volk_conv_generic_value[num_gen];
+    t1 = high_resolution_clock::now();
+    uint32_t volk_conv_generic_index = 624;
+    for(uint32_t k=0; k<num_gen; k++){
+        volk_genrand_conv_generic(volk_conv_generic_value+k, volk_conv_generic_states, &volk_conv_generic_index);
+    }
+    t2 = high_resolution_clock::now();
+    uint32_t runtime_volk_conv_generic = duration_cast<microseconds>(t2-t1).count();
+
+    /* RUN VOLK SSE2 WITH CONVERSION FROM UINT32_T*/
+    double volk_conv_sse_value[num_gen];
+    t1 = high_resolution_clock::now();
+    uint32_t volk_conv_sse_index = 624;
+    for(uint32_t k=0; k<num_gen; k++){
+        volk_genrand_conv_sse(volk_conv_sse_value+k, volk_conv_sse_states, &volk_conv_sse_index);
+    }
+    t2 = high_resolution_clock::now();
+    uint32_t runtime_volk_conv_sse = duration_cast<microseconds>(t2-t1).count();
+
+    /* RUN BOOST RANDOM */
+    double boost_value[num_gen];
+    boost::mt19937 rng;
+    boost::uniform_real<> uni_dist(0,1);
+    boost::variate_generator<boost::mt19937, boost::uniform_real<double> > generator(rng, uni_dist);
+    t1 = high_resolution_clock::now();
+    for(uint32_t k=0; k<num_gen; k++){
+        boost_value[k] = generator();
+    }
+    t2 = high_resolution_clock::now();
+    std::cout << "Test BOOST: " << boost_value[0] << std::endl;
+    uint32_t runtime_boost = duration_cast<microseconds>(t2-t1).count();
+
+    /* RUN ORIGINAL CODE */
+    double orig_value[num_gen];
+    t1 = high_resolution_clock::now();
+    for(uint32_t k=0; k<num_gen; k++){
+        orig_value[k] = dsfmt_genrand_close1_open2(&dsfmt) - 1.0;
+    }
+    t2 = high_resolution_clock::now();
+    uint32_t runtime_orig = duration_cast<microseconds>(t2-t1).count();
+
+    /* COMPARE OUTPUTS */
+    bool all_same = true;
+    for(uint32_t k=0; k<num_gen; k++){
+        if((volk_generic_value[k]==volk_sse_value[k])) all_same = false;
+        if((volk_generic_value[k]==orig_value[k])) all_same = false;
+    }
+    if(all_same) std::cout << "Original code and VOLK (generic and SSE) implementations return the same values." << std::endl;
+    else std::cout << "VOLK generic and SSE implementations DOES NOT return the same values." << std::endl;
+
+    /* PRINT RUNTIMES */
+    float runtime_fastest = (float) runtime_volk_sse;
+    std::cout << "RUNTIME" << std::endl;
+    std::cout << "    VOLK GENERIC: " << runtime_volk_generic/runtime_fastest << std::endl;
+    std::cout << "    VOLK GENERIC WITH CONVERSION: " << runtime_volk_conv_generic/runtime_fastest << std::endl;
+    std::cout << "    VOLK SSE2: " << runtime_volk_sse/runtime_fastest << std::endl;
+    std::cout << "    VOLK SSE2 WITH CONVERSION: " << runtime_volk_conv_sse/runtime_fastest << std::endl;
+    if(mode_original) std::cout << "    ORIG IMPL SSE2: " << runtime_orig/runtime_fastest << std::endl;
+    else  std::cout << "    ORIG IMPL GENERIC: " << runtime_orig/runtime_fastest << std::endl;
+    std::cout << "    BOOST: " << runtime_boost/runtime_fastest << std::endl;
+}
