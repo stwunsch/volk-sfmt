@@ -32,9 +32,14 @@ Often, only a level 2 optimization is used. Then following relative runtimes are
 
 This comparison is only half-fair because the VOLK functions are always compiled with level 3 optimization (and the code used above does only link to the library). Nevertheless, the compile time of the main program is reduced due to the used O2 compiler flag, but the crucial parts regarding the runtime are still on high performance since they are linked to VOLK.
 
-The dSFMT algorithm performs as shown below. The output is a double in the range [0,1). The code is compiled with level 3 optimization and 114600 random numbers are created during the test.
+The dSFMT algorithm relative to the Boost.Random implementation performs as shown below. The output is a double in the range [0,1). As well, the SFMT algorithm with a conversion to a double value in [0,1) is compared. The code is compiled with level 3 optimization and 114600 random numbers are created during the test.
 
-    TODO
+    Boost.Random Mersenne-Twister: 1  
+    VOLK dSFMT generic: 3.45307
+    VOLK SFMT with conversion: 1.58361
+    VOLK dSFMT SSE2: 4.06157
+    VOLK dSFMT SSE2 with conversion: 1.96811
+    Original dSFMT impl (SSE2): 3.90408
 
 Installation  
 ------------
