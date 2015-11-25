@@ -117,9 +117,35 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #ifndef INCLUDED_volk_sfmt_64f_genrand_a_H
 #define INCLUDED_volk_sfmt_64f_genrand_a_H
 
+inline static void dsfmt_recursion_generic(uint64_t *r, uint64_t *a, uint64_t *b, uint64_t *lung){
+    uint64_t t0, t1, L0, L1;
+
+    t0 = *a;
+    t1 = *(a+1);
+    L0 = *lung;
+    L1 = *(lung+1);
+    *lung = (t0 << DSFMT_SL1) ^ (L1 >> 32) ^ (L1 << 32) ^ *b;
+    *(lung+1) = (t1 << DSFMT_SL1) ^ (L0 >> 32) ^ (L0 << 32) ^ *(b+1);
+    *r = (*lung >> DSFMT_SR) ^ (*lung & DSFMT_MSK1) ^ t0;
+    *(r+1) = (*(lung+1) >> DSFMT_SR) ^ (*(lung+1) & DSFMT_MSK2) ^ t1;
+}
+
 #ifdef LV_HAVE_GENERIC
 
 static inline void volk_sfmt_64f_genrand_generic(double *states){
+    uint32_t i;
+    uint64_t *pstate = (uint64_t*) states;
+    uint64_t lung[2] = {*(states + 2*DSFMT_N), *(states + 2*DSFMT_N + 1)};
+
+    dsfmt_recursion_generic(pstate, pstate, pstate + DSFMT_POS1, lung);
+    for (i = 1; i < DSFMT_N - DSFMT_POS1; i++){
+        dsfmt_recursion_generic(pstate + 2*i, pstate + 2*i, pstate + 2*(i + DSFMT_POS1), lung);
+    }
+    for (; i < DSFMT_N; i++){
+        dsfmt_recursion_generic(pstate + 2*i, pstate + 2*i, pstate + 2*(i + DSFMT_POS1 - DSFMT_N), lung);
+    }
+    *(pstate + 2*DSFMT_N) = lung[0];
+    *(pstate + 2*DSFMT_N + 1) = lung[1];
 }
 
 #endif /* LV_HAVE_GENERIC */
@@ -131,15 +157,16 @@ static inline void volk_sfmt_64f_genrand_generic(double *states){
 static inline void volk_sfmt_64f_genrand_a_sse2(double *states){
     uint32_t i;
     __m128i *pstate = (__m128i*) states;
+    __m128i lung = *(pstate + DSFMT_N);
 
-    dsfmt_recursion(*(pstate), *(pstate), *(pstate + DSFMT_POS1), *(pstate + DSFMT_N));
+    dsfmt_recursion(*pstate, *pstate, *(pstate + DSFMT_POS1), lung);
     for (i = 1; i < DSFMT_N - DSFMT_POS1; i++){
-        dsfmt_recursion(*(pstate + i), *(pstate + i), *(pstate + i + DSFMT_POS1), *(pstate + DSFMT_N));
+        dsfmt_recursion(*(pstate + i), *(pstate + i), *(pstate + i + DSFMT_POS1), lung);
     }
     for (; i < DSFMT_N; i++){
-        dsfmt_recursion(*(pstate + i), *(pstate + i), *(pstate + i + DSFMT_POS1 - DSFMT_N), *(pstate + DSFMT_N));
+        dsfmt_recursion(*(pstate + i), *(pstate + i), *(pstate + i + DSFMT_POS1 - DSFMT_N), lung);
     }
-    *(pstate + DSFMT_N) = *(pstate + DSFMT_N); // FIXME: useless but in original code?
+    *(pstate + DSFMT_N) = lung;
 }
 
 #endif /* LV_HAVE_SSE2 */
