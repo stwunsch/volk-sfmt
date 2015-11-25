@@ -24,25 +24,18 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <volk_sfmt/volk_sfmt_64f_genrand.h>
-#include <volk_sfmt/volk_sfmt_64f_genrand_init.h>
 
 #ifdef LV_HAVE_GENERIC
 
 static inline void volk_sfmt_64f_genrandpuppet_64f_generic(double *output, double *input, unsigned int num_points){
-    if(num_points<DSFMT_N+1) printf("[volk_sfmt_64f_genrandpuppet_64f_generic] Number of points is smaller than 192 (DSFMT_N+1).\n");
+    if(num_points<(DSFMT_N+1)*2) printf("[volk_sfmt_64f_genrandpuppet_64f_generic] Number of points is smaller than 384 == 2*(DSFMT_N+1).\n");
     else{
-        for(unsigned int k=0; k<192; k++) output[k] = input[k];
-
-        volk_sfmt_64f_genrand_init(output, 4357);
+        for(unsigned int k=0; k<2*(DSFMT_N+1); k++) output[k] = input[k];
 
         volk_sfmt_64f_genrand_generic(output);
 
         // set all elements except first one to zero (for assert in test case)
-        for(unsigned int k = 192; k<num_points; k++) output[k] = 0;
-
-        printf("k dsfmt_original\n0 1.67765\n1 1.69418\n2 1.46743\n3 1.48924\n4 1.61878\n5 1.31226\n6 1.97787\n7 1.2196\n8 1.86675\n9 1.55711\n");
-
-        for(unsigned int k=0; k<10; k++) printf("[GENERIC OUTPUT] %i %f\n",k,(float) output[k]);
+        for(unsigned int k = 2*(DSFMT_N+1); k<num_points; k++) output[k] = 0;
     }
 }
 
@@ -51,14 +44,14 @@ static inline void volk_sfmt_64f_genrandpuppet_64f_generic(double *output, doubl
 #ifdef LV_HAVE_SSE2
 
 static inline void volk_sfmt_64f_genrandpuppet_64f_a_sse2(double *output, double *input, unsigned int num_points){
-    if(num_points<DSFMT_N+1) printf("[volk_sfmt_64f_genrandpuppet_64f_generic] Number of points is smaller than 192 (DSFMT_N+1).\n");
+    if(num_points<2*(DSFMT_N+1)) printf("[volk_sfmt_64f_genrandpuppet_64f_generic] Number of points is smaller than 384 == 2*(DSFMT_N+1).\n");
     else{
-        for(unsigned int k=0; k<192; k++) output[k] = input[k];
+        for(unsigned int k=0; k<2*(DSFMT_N+1); k++) output[k] = input[k];
 
         volk_sfmt_64f_genrand_a_sse2(output);
 
         // set all elements except first one to zero (for assert in test case)
-        for(unsigned int k = 192; k<num_points; k++) output[k] = 0;
+        for(unsigned int k = 2*(DSFMT_N+1); k<num_points; k++) output[k] = 0;
     }
 }
 

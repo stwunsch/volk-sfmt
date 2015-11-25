@@ -94,7 +94,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * N64 is the size of internal state array when regarded as an array
  * of 64-bit integers.
  */
-//#define DSFMT_N64 (DSFMT_N * 2) // FIXME
+#define DSFMT_N64 (DSFMT_N * 2)
 
 /*
  * Algorithm parameters for Mersenne exponent of 19937.
@@ -135,9 +135,9 @@ inline static void dsfmt_recursion_generic(uint64_t *r, uint64_t *a, uint64_t *b
 static inline void volk_sfmt_64f_genrand_generic(double *states){
     uint32_t i;
     uint64_t *pstate = (uint64_t*) states;
-    uint64_t lung[2] = {*(states + 2*DSFMT_N), *(states + 2*DSFMT_N + 1)};
+    uint64_t lung[2] = {*(pstate + 2*DSFMT_N), *(pstate + 2*DSFMT_N + 1)};
 
-    dsfmt_recursion_generic(pstate, pstate, pstate + DSFMT_POS1, lung);
+    dsfmt_recursion_generic(pstate, pstate, pstate + 2*DSFMT_POS1, lung);
     for (i = 1; i < DSFMT_N - DSFMT_POS1; i++){
         dsfmt_recursion_generic(pstate + 2*i, pstate + 2*i, pstate + 2*(i + DSFMT_POS1), lung);
     }
