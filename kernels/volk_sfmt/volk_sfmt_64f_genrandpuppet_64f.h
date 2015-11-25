@@ -24,6 +24,7 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <volk_sfmt/volk_sfmt_64f_genrand.h>
+#include <volk_sfmt/volk_sfmt_64f_genrand_init.h>
 
 #ifdef LV_HAVE_GENERIC
 

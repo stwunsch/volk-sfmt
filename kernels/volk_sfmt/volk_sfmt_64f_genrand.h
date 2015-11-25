@@ -159,12 +159,12 @@ static inline void volk_sfmt_64f_genrand_a_sse2(double *states){
     __m128i *pstate = (__m128i*) states;
     __m128i lung = *(pstate + DSFMT_N);
 
-    dsfmt_recursion(*pstate, *pstate, *(pstate + DSFMT_POS1), lung);
+    dsfmt_recursion(pstate, pstate, pstate + DSFMT_POS1, &lung);
     for (i = 1; i < DSFMT_N - DSFMT_POS1; i++){
-        dsfmt_recursion(*(pstate + i), *(pstate + i), *(pstate + i + DSFMT_POS1), lung);
+        dsfmt_recursion(pstate + i, pstate + i, pstate + i + DSFMT_POS1, &lung);
     }
     for (; i < DSFMT_N; i++){
-        dsfmt_recursion(*(pstate + i), *(pstate + i), *(pstate + i + DSFMT_POS1 - DSFMT_N), lung);
+        dsfmt_recursion(pstate + i, pstate + i, pstate + i + DSFMT_POS1 - DSFMT_N, &lung);
     }
     *(pstate + DSFMT_N) = lung;
 }

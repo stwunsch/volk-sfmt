@@ -18,7 +18,7 @@ void run_mode(){
 
 static inline void dsfmt_genrand(double* output, double* states, uint32_t* index){
     if(*index>=DSFMT_N64){
-        if(0) volk_sfmt_64f_genrand_manual(states, "a_sse2");
+        if(1) volk_sfmt_64f_genrand_manual(states, "a_sse2");
         else volk_sfmt_64f_genrand_manual(states, "generic");
         *index = 0;
     }

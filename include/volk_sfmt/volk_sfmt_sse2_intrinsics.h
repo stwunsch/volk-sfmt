@@ -64,26 +64,24 @@ static inline __m128i sfmt_recursion(__m128i a, __m128i b, __m128i c, __m128i d)
 #define DSFMT_MSK2	UINT64_C(0x000ffdfffc90fffd)
 #define DSFMT_SL1	19
 
-static inline void dsfmt_recursion(__m128i r, __m128i a, __m128i b, __m128i u){
-    __m128i v, w, y, z, x;
+static inline void dsfmt_recursion(__m128i *r, __m128i *a, __m128i *b, __m128i *u){
+    __m128i v, w, y, z;
 
     static const uint64_t dsfmt_param_mask[2] = {DSFMT_MSK1, DSFMT_MSK2};
     static const __m128i *_dsfmt_param_mask = (__m128i*) dsfmt_param_mask;
 
-    x = a;
-
-    z = _mm_slli_epi64(x, DSFMT_SL1);
-    y = _mm_shuffle_epi32(u, DSFMT_SSE2_SHUFF);
-    z = _mm_xor_si128(z, b);
+    z = _mm_slli_epi64(*a, DSFMT_SL1);
+    y = _mm_shuffle_epi32(*u, DSFMT_SSE2_SHUFF);
+    z = _mm_xor_si128(z, *b);
     y = _mm_xor_si128(y, z);
 
     v = _mm_srli_epi64(y, DSFMT_SR);
     w = _mm_and_si128(y, *_dsfmt_param_mask);
-    v = _mm_xor_si128(v, x);
+    v = _mm_xor_si128(v, *a);
     v = _mm_xor_si128(v, w);
 
-    r = v;
-    u = y;
+    *r = v;
+    *u = y;
 }
 
 #endif /* INCLUDE_VOLK_VOLK_SSE2_INTRINSICS_H_ */
