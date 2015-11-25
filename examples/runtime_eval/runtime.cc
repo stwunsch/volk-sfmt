@@ -34,14 +34,6 @@ static inline void sfmt_genrand_generic(uint32_t* output, uint32_t* states, uint
     *index += 1;
 }
 
-static inline void sfmt_genrand_init(uint32_t *states, uint32_t seed){
-    int i;
-    states[0] = seed;
-    for (i = 1; i < SFMT_N32; i++) {
-        states[i] = 1812433253UL * (states[i - 1] ^ (states[i - 1] >> 30)) + i;
-    }
-}
-
 #if defined(HAVE_SSE2)
 void run_mode(){
     std::cout << "The original implementation uses SSE2." << std::endl;
@@ -104,7 +96,7 @@ int main(void){
     high_resolution_clock::time_point t1, t2;
     size_t alignment = volk_sfmt_get_alignment(); // get system memory alignment
     uint32_t *init_states = (uint32_t*) volk_sfmt_malloc(SFMT_N32*4,alignment);
-    sfmt_genrand_init(init_states, 4357);
+    volk_sfmt_32u_genrand_init(init_states, 4357);
 
     /* Runtime: SFMT (VOLK implementation, generic) */
     uint32_t runtime_volk_generic;
