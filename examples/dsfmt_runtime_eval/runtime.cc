@@ -159,13 +159,13 @@ int main(void){
     else std::cout << "VOLK generic and SSE implementations DOES NOT return the same values." << std::endl;
 
     /* PRINT RUNTIMES */
-    float runtime_fastest = (float) runtime_volk_sse;
+    float runtime_comp = (float) runtime_boost;
     std::cout << "RUNTIME" << std::endl;
-    std::cout << "    VOLK GENERIC: " << runtime_volk_generic/runtime_fastest << std::endl;
-    std::cout << "    VOLK GENERIC WITH CONVERSION: " << runtime_volk_conv_generic/runtime_fastest << std::endl;
-    std::cout << "    VOLK SSE2: " << runtime_volk_sse/runtime_fastest << std::endl;
-    std::cout << "    VOLK SSE2 WITH CONVERSION: " << runtime_volk_conv_sse/runtime_fastest << std::endl;
-    if(mode_original) std::cout << "    ORIG IMPL SSE2: " << runtime_orig/runtime_fastest << std::endl;
-    else  std::cout << "    ORIG IMPL GENERIC: " << runtime_orig/runtime_fastest << std::endl;
-    std::cout << "    BOOST: " << runtime_boost/runtime_fastest << std::endl;
+    std::cout << "    VOLK GENERIC: " << runtime_comp/runtime_volk_generic << std::endl;
+    std::cout << "    VOLK GENERIC WITH CONVERSION: " << runtime_comp/runtime_volk_conv_generic << std::endl;
+    std::cout << "    VOLK SSE2: " << runtime_comp/runtime_volk_sse << std::endl;
+    std::cout << "    VOLK SSE2 WITH CONVERSION: " << runtime_comp/runtime_volk_conv_sse << std::endl;
+    if(mode_original) std::cout << "    ORIG IMPL SSE2: " << runtime_comp/runtime_orig << std::endl;
+    else  std::cout << "    ORIG IMPL GENERIC: " << runtime_comp/runtime_orig << std::endl;
+    std::cout << "    BOOST: " << runtime_comp/runtime_boost << std::endl;
 }
