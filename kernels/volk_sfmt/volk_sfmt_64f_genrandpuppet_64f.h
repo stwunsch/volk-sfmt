@@ -24,6 +24,7 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <volk_sfmt/volk_sfmt_64f_genrand.h>
+#include <volk_sfmt/volk_sfmt_64f_genrand_init.h>
 
 #ifdef LV_HAVE_GENERIC
 
@@ -32,14 +33,16 @@ static inline void volk_sfmt_64f_genrandpuppet_64f_generic(double *output, doubl
     else{
         for(unsigned int k=0; k<192; k++) output[k] = input[k];
 
-        for(unsigned int k=0; k<10; k++) printf("[GENERIC INPUT] %i %f\n",k,output[k]);
+        volk_sfmt_64f_genrand_init(output, 4357);
 
         volk_sfmt_64f_genrand_generic(output);
 
         // set all elements except first one to zero (for assert in test case)
         for(unsigned int k = 192; k<num_points; k++) output[k] = 0;
 
-        for(unsigned int k=0; k<10; k++) printf("[GENERIC OUTPUT] %i %f\n",k,output[k]);
+        printf("k dsfmt_original\n0 1.67765\n1 1.69418\n2 1.46743\n3 1.48924\n4 1.61878\n5 1.31226\n6 1.97787\n7 1.2196\n8 1.86675\n9 1.55711\n");
+
+        for(unsigned int k=0; k<10; k++) printf("[GENERIC OUTPUT] %i %f\n",k,(float) output[k]);
     }
 }
 
@@ -52,14 +55,10 @@ static inline void volk_sfmt_64f_genrandpuppet_64f_a_sse2(double *output, double
     else{
         for(unsigned int k=0; k<192; k++) output[k] = input[k];
 
-        for(unsigned int k=0; k<10; k++) printf("[SSE2 INPUT] %i %f\n",k,output[k]);
-
         volk_sfmt_64f_genrand_a_sse2(output);
 
         // set all elements except first one to zero (for assert in test case)
         for(unsigned int k = 192; k<num_points; k++) output[k] = 0;
-
-        for(unsigned int k=0; k<10; k++) printf("[SSE2 OUTPUT] %i %f\n",k,output[k]);
     }
 }
 

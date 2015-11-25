@@ -10,6 +10,12 @@ void run_mode(){
 }
 #endif
 
+#if !defined(HAVE_SSE2)
+void run_mode(){
+    std::cout << "The original implementation DOES NOT use SSE2." << std::endl;
+}
+#endif
+
 static inline void dsfmt_genrand(double* output, double* states, uint32_t* index){
     if(*index>=192){
         if(0) volk_sfmt_64f_genrand_manual(states, "a_sse2");

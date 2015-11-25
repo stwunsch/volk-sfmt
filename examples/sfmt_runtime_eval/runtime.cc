@@ -6,11 +6,11 @@
 
 /*** NOTE ***
  * You need a lot of memory for this (about 8GB)!
- * Reduce 'num_gen' if you run into truble.
+ * Reduce 'num_gen' if you run into trouble.
  */
 
 #include <volk_sfmt/volk_sfmt.h>
-#include "../reference_impl/SFMT.h"
+#include "../sfmt_reference_impl/SFMT.h"
 #include <boost/random.hpp>
 #include <chrono>
 
