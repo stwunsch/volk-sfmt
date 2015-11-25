@@ -5,7 +5,7 @@ LDPATH =
 INCPATH =
 
 all:
-	$(CC) $(CFLAGS) runtime.cc ../reference_impl/SFMT.c -o runtime $(LDFLAGS) $(LDPATH) $(INCPATH)
+	$(CC) $(CFLAGS) runtime.cc ../sfmt_reference_impl/SFMT.c -o runtime $(LDFLAGS) $(LDPATH) $(INCPATH)
 
 clean:
 	rm -f runtime

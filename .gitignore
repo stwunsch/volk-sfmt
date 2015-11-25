@@ -2,4 +2,5 @@ build/
 *.swp
 *.swo
 volk_modtool.cfg
-examples/reference_impl/
+examples/sfmt_reference_impl/
+examples/dsfmt_reference_impl/
