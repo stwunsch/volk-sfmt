@@ -32,10 +32,14 @@ static inline void volk_sfmt_64f_genrandpuppet_64f_generic(double *output, doubl
     else{
         for(unsigned int k=0; k<192; k++) output[k] = input[k];
 
+        for(unsigned int k=0; k<10; k++) printf("[GENERIC INPUT] %i %f\n",k,output[k]);
+
         volk_sfmt_64f_genrand_generic(output);
 
         // set all elements except first one to zero (for assert in test case)
         for(unsigned int k = 192; k<num_points; k++) output[k] = 0;
+
+        for(unsigned int k=0; k<10; k++) printf("[GENERIC OUTPUT] %i %f\n",k,output[k]);
     }
 }
 
