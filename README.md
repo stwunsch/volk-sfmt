@@ -1,12 +1,12 @@
-VOLK module with SIMD-oriented Fast Mersenne-Twister (SFMT) implementation  
-==========================================================================
+VOLK module with SIMD-oriented Fast Mersenne-Twister (SFMT and dSFMT) implementation  
+====================================================================================
 
-This module is a stand-alone extension (or so-called out-of-tree module) of VOLK [0]. The purpose is porting the SFMT code [1,2] to the VOLK framework, which ensures portability of the code. VOLK selects the correct implementation (generic or SSE2) based on the compatibility of the used hardware.
+This module is a stand-alone extension (or so-called out-of-tree module) of VOLK [0]. The purpose is porting the SFMT and dSFMT code [1,2,3] to the VOLK framework, which ensures portability of the code. VOLK selects the correct implementation (generic or SSE2) based on the compatibility of the used hardware. The difference between SFMT and dSFMT is the return value type. SFMT returns uint32_t values and dSFMT double values. The main advantage of the dSFMT algorithm is the direct output of a double value, no conversion is needed. This results in a huge performance boost.
 
-Runtime  evaluation  
+Runtime  evaluation
 -------------------
 
-Runtime relative to standard Mersenne Twister to generate 62400000 pseudo random numbers. The code is compiled with level 3 optimization.
+Runtime of the SFMT algorithm (not the dSFMT!) relative to standard Mersenne Twister to generate 62400000 pseudo random numbers. Output is a uint32_t value. The code is compiled with level 3 optimization.
 
     Standard Mersenne-Twister: 1  
     Boost.Random Mersenne-Twister: 1.02159  
@@ -23,14 +23,23 @@ Often, only a level 2 optimization is used. Then following relative runtimes are
 
     Standard Mersenne-Twister: 1  
     Boost.Random Mersenne-Twister: 1.1719  
-    Original impl (SSE2): 1.42074  
-    VOLK generic: 1.15378  
-    VOLK SSE2: 2.4919  
-    Original array impl: 4.56878  
-    VOLK array generic: 1.91401  
-    VOLK array SSE2: 4.7696  
+    Original SFMT impl (SSE2): 1.42074  
+    VOLK SFMT generic: 1.15378  
+    VOLK SFMT SSE2: 2.4919  
+    Original SFMT array impl: 4.56878  
+    VOLK SFMT array generic: 1.91401  
+    VOLK SFMT array SSE2: 4.7696  
 
 This comparison is only half-fair because the VOLK functions are always compiled with level 3 optimization (and the code used above does only link to the library). Nevertheless, the compile time of the main program is reduced due to the used O2 compiler flag, but the crucial parts regarding the runtime are still on high performance since they are linked to VOLK.
+
+The dSFMT algorithm performs as shown below. The output is a double in the range [0,1). The code is compiled with level 3 optimization and 114600 random numbers are created during the test.
+
+    Boost.Random Mersenne-Twister: 4.06061
+    VOLK dSFMT generic: 1.27922
+    VOLK dSFMT SSE2: 1
+    VOLK SFMT generic with conversion: 2.48918
+    VOLK SFMT SSE2 with conversion: 2.07359
+    Original dSFMT impl (SSE2): 1.07359
 
 Installation  
 ------------
@@ -50,3 +59,4 @@ References
 [0] http://www.libvolk.org  
 [1] http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/SFMT/  
 [2] http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/SFMT/SFMT-src-1.4.1.tar.gz  
+[3] http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/SFMT/dSFMT-src-2.2.3.tar.gz
