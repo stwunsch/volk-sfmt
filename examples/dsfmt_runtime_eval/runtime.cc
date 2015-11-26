@@ -112,8 +112,8 @@ int main(void){
     /* INIT */
     size_t alignment = volk_sfmt_get_alignment();
     std::cout << "Alignment: " << alignment << std::endl;
-    double *volk_generic_states = (double*) volk_sfmt_malloc((DSFMT_N64+1)*2, alignment);
-    double *volk_sse_states = (double*) volk_sfmt_malloc((DSFMT_N64+1)*2, alignment);
+    double *volk_generic_states = (double*) volk_sfmt_malloc((DSFMT_N+1)*16, alignment);
+    double *volk_sse_states = (double*) volk_sfmt_malloc((DSFMT_N+1)*16, alignment);
     uint32_t *volk_conv_generic_states = (uint32_t*) volk_sfmt_malloc(624*4, alignment);
     uint32_t *volk_conv_sse_states = (uint32_t*) volk_sfmt_malloc(624*4, alignment);
     uint32_t *mt_std_states = (uint32_t*) volk_sfmt_malloc(624*4,alignment);

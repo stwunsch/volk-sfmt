@@ -16,7 +16,7 @@ static inline void sfmt_genrand(double* output, double* states, uint32_t* index)
 
 int main(void){
     // Allocate the states vector
-    double *volk_states = (double*) volk_sfmt_malloc((DSFMT_N64+1)*2,volk_sfmt_get_alignment());
+    double *volk_states = (double*) volk_sfmt_malloc((DSFMT_N+1)*16,volk_sfmt_get_alignment());
 
     // Init the states vector with a simple number generator
     uint32_t seed = 4357; // just a random seed, never ever use only zeros! Only zeros breaks the algorithm.
@@ -34,5 +34,5 @@ int main(void){
     }
 
     // Clean-up
-    //volk_sfmt_free(volk_states);
+    volk_sfmt_free(volk_states);
 }
