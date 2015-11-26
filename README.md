@@ -42,7 +42,7 @@ The dSFMT algorithm relative to the standard Mersenne-Twister implementation wit
     VOLK dSFMT SSE2: 2.10364  
     VOLK SFMT SSE2 with conversion: 1.05182  
     
-And again, the same with often used level 2 optimization. Note again, that VOLK is still compiled with the O3 compiler flag.
+And again, the same with the often used level 2 optimization. Note again, that VOLK is still compiled with the O3 compiler flag.
 
     Standard Mersenne-Twister with conversion: 1  
     Boost.Random Mersenne-Twister: 0.870902  
