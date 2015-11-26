@@ -1,0 +1,1 @@
+This is an example use of the volk_sfmt_64f_genrand kernel. Since the SFMT algorithm produces 624 pseudo random numbers at a time, the actual use of the kernel needs little bit logic for gathering a single random number.
