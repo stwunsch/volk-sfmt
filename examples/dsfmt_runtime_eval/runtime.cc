@@ -206,8 +206,8 @@ int main(void){
     /* COMPARE OUTPUTS */
     bool all_same = true;
     for(uint32_t k=0; k<num_gen; k++){
-        if((volk_generic_value[k]==volk_sse_value[k])) all_same = false;
-        if((volk_generic_value[k]==orig_value[k])) all_same = false;
+        if(not(volk_generic_value[k]==volk_sse_value[k])) all_same = false;
+        if(not(volk_generic_value[k]==orig_value[k])) all_same = false;
     }
     if(all_same) std::cout << "Original code and VOLK (generic and SSE) implementations return the same values." << std::endl;
     else std::cout << "VOLK generic and SSE implementations DOES NOT return the same values." << std::endl;
