@@ -3,6 +3,8 @@ VOLK module with SIMD-oriented Fast Mersenne-Twister (SFMT and dSFMT) implementa
 
 This module is a stand-alone extension (or so-called out-of-tree module) of VOLK [0]. The purpose is porting the SFMT and dSFMT code [1,2,3] to the VOLK framework, which ensures portability of the code. VOLK selects the correct implementation (generic or SSE2) based on the compatibility of the used hardware. The difference between SFMT and dSFMT is the return value type. SFMT returns uint32_t values and dSFMT double values. The main advantage of the dSFMT algorithm is the direct output of a double value, no conversion is needed. This results in a huge performance boost.
 
+The code is not included in the VOLK core because the copyright of the (d)SFMT algorithm is not mine and the copyright of the VOLK core is fully hold by the Free Software Foundation (FSF). Therefore, I can't assign the copyright of the code to the FSF, which is necessary to contribute directly to the project. The VOLK community is working on a solution to include the code in the core.
+
 Runtime  evaluation
 -------------------
 
